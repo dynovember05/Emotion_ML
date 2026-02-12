@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Emotion Detection Web Client</title>
+    <!-- MediaPipe Face Mesh -->
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js" crossorigin="anonymous"></script>
+    <style>
+        body {
+            font-family: sans-serif;
+            text-align: center;
+            background-color: #f0f2f5;
+        }
+
+        .container {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        video {
+            transform: scaleX(-1);
+            display: none;
+        }
+
+        /* 비디오는 숨기고 캔버스만 보여줌 */
+        canvas {
+            transform: scaleX(-1);
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 640px;
+        }
+
+        #result-box {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 10px;
+            background: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+            min-width: 300px;
+        }
+
+        #emotion-label {
+            font-size: 2em;
+            font-weight: bold;
+        }
+
+        .anxious {
+            color: #dc3545;
+        }
+
+        .neutral {
+            color: #28a745;
+        }
+
+        #debug-info {
+            color: #666;
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Real-time Emotion Detection</h1>
+    <div class="container">
+        <video id="input_video"></video>
+        <canvas id="output_canvas" width="640" height="480"></canvas>
+    </div>
+
+    <div id="result-box">
+        <div>Current Emotion</div>
+        <div id="emotion-label">Waiting...</div>
+        <div id="score-label">Confidence: -</div>
+        <div id="debug-info">FPS: <span id="fps-val">0</span> | Latency: <span id="latency-val">0</span>ms</div>
+    </div>
+
+    <script>
+        const videoElement = document.getElementById('input_video');
+        const canvasElement = document.getElementById('output_canvas');
+        const canvasCtx = canvasElement.getContext('2d');
+        const emotionLabel = document.getElementById('emotion-label');
+        const scoreLabel = document.getElementById('score-label');
+
+        let lastTime = 0;
+        let frameCount = 0;
+        let lastApiCallTime = 0;
+        const API_INTERVAL = 100; // API 호출 간격 (ms) - 너무 빠르면 서버 부하
+
+        // 랜드마크 정규화 함수 (Python 코드와 동일 로직)
+        function normalizeLandmarks(landmarks) {
+            // 1. Array 변환 (x, y, z)
+            let coords = landmarks.map(lm => [lm.x, lm.y, lm.z]);
+
+            // 2. 중심 이동 (코 끝: 1번 인덱스)
+            // MediaPipe JS 랜드마크 인덱스는 Python과 동일 (FaceMesh)
+            const noseTip = coords[1];
+            const coordsCentered = coords.map(p => [
+                p[0] - noseTip[0],
+                p[1] - noseTip[1],
+                p[2] - noseTip[2]
+            ]);
+
+            // 3. 스케일링 (최대 거리)
+            let maxDist = 0;
+            for (let p of coordsCentered) {
+                const dist = Math.sqrt(p[0] * p[0] + p[1] * p[1] + p[2] * p[2]);
+                if (dist > maxDist) maxDist = dist;
+            }
+
+            let finalCoords = [];
+            if (maxDist > 0) {
+                for (let p of coordsCentered) {
+                    finalCoords.push(p[0] / maxDist, p[1] / maxDist, p[2] / maxDist);
+                }
+            } else {
+                for (let p of coordsCentered) {
+                    finalCoords.push(p[0], p[1], p[2]);
+                }
+            }
+            return finalCoords;
+        }
+
+        async function onResults(results) {
+            canvasCtx.save();
+            canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+            canvasCtx.drawImage(results.image, 0, 0, canvasElement.width, canvasElement.height);
+
+            if (results.multiFaceLandmarks && results.multiFaceLandmarks.length > 0) {
+                const landmarks = results.multiFaceLandmarks[0];
+
+                // 얼굴 그물망 그리기
+                drawConnectors(canvasCtx, landmarks, FACEMESH_TESSELATION,
+                    { color: '#C0C0C070', lineWidth: 1 });
+
+                // API 호출 (일정 간격마다)
+                const now = Date.now();
+                if (now - lastApiCallTime > API_INTERVAL) {
+                    lastApiCallTime = now;
+
+                    try {
+                        const normalizedData = normalizeLandmarks(landmarks);
+
+                        const startTime = performance.now();
+                        const response = await fetch('http://localhost:8001/predict/landmarks', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ landmarks: normalizedData })
+                        });
+
+                        if (response.ok) {
+                            const result = await response.json();
+                            const endTime = performance.now();
+
+                            // UI 업데이트
+                            const pred = result.prediction;
+                            const score = result.anxiety_score;
+
+                            emotionLabel.innerText = pred;
+                            scoreLabel.innerText = `Anxiety Score: ${score}%`;
+                            document.getElementById('latency-val').innerText = Math.round(endTime - startTime);
+
+                            if (pred === 'Anxious') {
+                                emotionLabel.className = 'anxious';
+                                canvasElement.style.borderColor = 'red';
+                                canvasElement.style.borderWidth = '5px';
+                                canvasElement.style.borderStyle = 'solid';
+                            } else {
+                                emotionLabel.className = 'neutral';
+                                canvasElement.style.borderColor = 'green';
+                                canvasElement.style.borderWidth = '5px';
+                                canvasElement.style.borderStyle = 'solid';
+                            }
+                        }
+                    } catch (e) {
+                        console.error("API Error:", e);
+                        emotionLabel.innerText = "Server Error";
+                    }
+                }
+            } else {
+                emotionLabel.innerText = "No Face";
+                emotionLabel.className = '';
+                canvasElement.style.border = 'none';
+            }
+            canvasCtx.restore();
+
+            // FPS 계산
+            frameCount++;
+        }
+
+        setInterval(() => {
+            document.getElementById('fps-val').innerText = frameCount;
+            frameCount = 0;
+        }, 1000);
+
+        const faceMesh = new FaceMesh({
+            locateFile: (file) => {
+                return `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}`;
+            }
+        });
+
+        faceMesh.setOptions({
+            maxNumFaces: 1,
+            refineLandmarks: true,
+            minDetectionConfidence: 0.5,
+            minTrackingConfidence: 0.5
+        });
+
+        faceMesh.onResults(onResults);
+
+        const camera = new Camera(videoElement, {
+            onFrame: async () => {
+                await faceMesh.send({ image: videoElement });
+            },
+            width: 640,
+            height: 480
+        });
+
+        camera.start();
+    </script>
+</body>
+
+</html>
