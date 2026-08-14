@@ -1,0 +1,8 @@
+{
+  "binary_train": 47,
+  "binary_val": 7,
+  "binary_test": 10,
+  "pretrain7_train": 178,
+  "pretrain7_val": 31,
+  "input_dim": 1434
+}

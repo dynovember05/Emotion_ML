@@ -1,0 +1,31 @@
+{
+  "method": "probability_average",
+  "class_names": [
+    "Neutral",
+    "Anxious"
+  ],
+  "threshold": 0.4088607430458069,
+  "selected_by": "validation macro-F1, evaluated on fixed binary test split",
+  "members": [
+    "raw_geom_compact_seed123",
+    "raw_geom_compact_seed7"
+  ],
+  "bundle_paths": [
+    "C:\\Users\\ldy34\\Desktop\\Face\\ML\\experiments_feature_ensemble\\raw_geom_compact_seed123\\direct_binary_bundle.pth",
+    "C:\\Users\\ldy34\\Desktop\\Face\\ML\\experiments_feature_ensemble\\raw_geom_compact_seed7\\direct_binary_bundle.pth"
+  ],
+  "test_metrics": {
+    "threshold": 0.4088607430458069,
+    "accuracy": 0.8525545015809619,
+    "balanced_accuracy": 0.8527896424655104,
+    "macro_f1": 0.8525004781844815,
+    "neutral_recall": 0.8794492948287441,
+    "anxious_recall": 0.8261299901022765,
+    "anxious_precision": 0.8746070555361509
+  },
+  "reference_previous_best": {
+    "accuracy": 0.853053752704277,
+    "macro_f1": 0.8527247784153322,
+    "model": "C:\\Users\\ldy34\\Desktop\\Face\\ML\\experiments_ab_2gpu_tuning\\tune_f_small_model\\seed_123\\direct_binary_best.pth"
+  }
+}

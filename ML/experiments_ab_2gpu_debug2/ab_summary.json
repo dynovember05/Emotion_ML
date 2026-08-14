@@ -1,0 +1,63 @@
+{
+  "config": {
+    "base_dir": "c:\\Users\\ldy34\\Desktop\\Face\\video",
+    "out_dir": "c:\\Users\\ldy34\\Desktop\\Face\\ML\\experiments_ab_2gpu_debug2",
+    "cache_path": "c:\\Users\\ldy34\\Desktop\\Face\\ML\\cache_landmarks_7class_debug2.npz",
+    "force_rebuild_cache": false,
+    "max_per_zip": 10,
+    "extract_workers": 2,
+    "loader_workers": 0,
+    "seed": 42,
+    "num_gpus": 2,
+    "batch_size_per_gpu": 16,
+    "test_size": 0.15,
+    "val_size": 0.15,
+    "epochs_binary_direct": 1,
+    "epochs_pretrain7": 1,
+    "epochs_binary_finetune": 1,
+    "lr_binary_direct": 0.001,
+    "lr_pretrain7": 0.0008,
+    "lr_binary_finetune": 0.0004,
+    "weight_decay": 0.0001,
+    "hidden_dim": 512,
+    "dropout_block": 0.3,
+    "dropout_head": 0.2,
+    "label_smoothing": 0.05,
+    "noise_std": 0.002,
+    "early_stop_patience": 2,
+    "early_stop_min_delta": 0.0001,
+    "amp": true,
+    "no_amp": false
+  },
+  "split_sizes": {
+    "binary_train": 56,
+    "binary_val": 11,
+    "binary_test": 13,
+    "pretrain7_train": 230,
+    "pretrain7_val": 36
+  },
+  "results": {
+    "direct_binary": {
+      "accuracy": 0.46153846153846156,
+      "balanced_accuracy": 0.48809523809523814,
+      "macro_f1": 0.40522875816993464,
+      "classification_report": "              precision    recall  f1-score   support\n\n     Neutral     0.5000    0.1429    0.2222         7\n     Anxious     0.4545    0.8333    0.5882         6\n\n    accuracy                         0.4615        13\n   macro avg     0.4773    0.4881    0.4052        13\nweighted avg     0.4790    0.4615    0.3912        13\n"
+    },
+    "finetune_binary_from7": {
+      "accuracy": 0.46153846153846156,
+      "balanced_accuracy": 0.5,
+      "macro_f1": 0.3157894736842105,
+      "classification_report": "              precision    recall  f1-score   support\n\n     Neutral     0.0000    0.0000    0.0000         7\n     Anxious     0.4615    1.0000    0.6316         6\n\n    accuracy                         0.4615        13\n   macro avg     0.2308    0.5000    0.3158        13\nweighted avg     0.2130    0.4615    0.2915        13\n"
+    }
+  },
+  "delta_finetune_minus_direct": {
+    "accuracy": 0.0,
+    "balanced_accuracy": 0.011904761904761862,
+    "macro_f1": -0.08943928448572414
+  },
+  "artifacts": {
+    "direct_ckpt": "c:\\Users\\ldy34\\Desktop\\Face\\ML\\experiments_ab_2gpu_debug2\\direct_binary_best.pth",
+    "pretrain7_ckpt": "c:\\Users\\ldy34\\Desktop\\Face\\ML\\experiments_ab_2gpu_debug2\\pretrain7_best.pth",
+    "finetune_ckpt": "c:\\Users\\ldy34\\Desktop\\Face\\ML\\experiments_ab_2gpu_debug2\\finetune_binary_best.pth"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "cache_path": "c:\\Users\\ldy34\\Desktop\\Face\\ML\\cache_landmarks_7class_debug2.npz",
+  "num_samples": 280,
+  "num_features": 1434,
+  "class_counts": {
+    "Neutral": 40,
+    "Anxious": 40,
+    "Joy": 40,
+    "Embarrassed": 40,
+    "Angry": 40,
+    "Hurt": 40,
+    "Sad": 40
+  },
+  "unique_subjects": 236
+}

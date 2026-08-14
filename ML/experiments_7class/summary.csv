@@ -1,0 +1,6 @@
+﻿name,epochs,lr,seed,best_val_acc,val_loss_at_best,final_val_acc,final_val_loss,best_epoch,history
+baseline_e200_lr1e3,200,0.001,42,0.814,0.8305699918643538,0.8127619047619048,0.8318086833838957,195,c:\Users\ldy34\Desktop\Face\ML\experiments_7class\baseline_e200_lr1e3_history.json
+lr5e4_e200,200,0.0005,42,0.8137142857142857,0.8170199006436819,0.8128571428571428,0.8149325030754848,177,c:\Users\ldy34\Desktop\Face\ML\experiments_7class\lr5e4_e200_history.json
+seed7_e200_lr1e3,200,0.001,7,0.8124285714285714,0.8529816269874573,0.8118095238095238,0.85049558116729,193,c:\Users\ldy34\Desktop\Face\ML\experiments_7class\seed7_e200_lr1e3_history.json
+lr3e4_e240,240,0.0003,42,0.8118095238095238,0.8157865265047693,0.8111904761904762,0.8219767758645207,230,c:\Users\ldy34\Desktop\Face\ML\experiments_7class\lr3e4_e240_history.json
+seed123_e200_lr1e3,200,0.001,123,0.8113809523809524,0.8061254774949637,0.8091428571428572,0.8221347644386521,165,c:\Users\ldy34\Desktop\Face\ML\experiments_7class\seed123_e200_lr1e3_history.json

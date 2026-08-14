@@ -1,0 +1,266 @@
+{
+  "config": {
+    "base_dir": "C:\\Users\\ldy34\\Desktop\\Face\\video",
+    "out_dir": "C:\\Users\\ldy34\\Desktop\\Face\\ML\\experiments_feature_ensemble\\raw_geom_compact_seed123",
+    "cache_path": "C:\\Users\\ldy34\\Desktop\\Face\\ML\\cache_landmarks_7class.npz",
+    "force_rebuild_cache": false,
+    "max_per_zip": 5000,
+    "extract_workers": 12,
+    "loader_workers": 4,
+    "seed": 123,
+    "split_seed": 123,
+    "num_gpus": 2,
+    "batch_size_per_gpu": 256,
+    "test_size": 0.15,
+    "val_size": 0.15,
+    "feature_mode": "raw_geom",
+    "feature_preset": "compact",
+    "scaler_fit": "binary_train",
+    "no_standardize": false,
+    "epochs_binary_direct": 140,
+    "epochs_pretrain7": 160,
+    "epochs_binary_finetune": 100,
+    "train_finetune": false,
+    "lr_binary_direct": 0.0002,
+    "lr_pretrain7": 0.0008,
+    "lr_binary_finetune": 0.0003,
+    "weight_decay": 0.0001,
+    "hidden_dim": 384,
+    "dropout_block": 0.3,
+    "dropout_head": 0.3,
+    "label_smoothing": 0.01,
+    "noise_std": 0.01,
+    "early_stop_patience": 35,
+    "early_stop_min_delta": 0.0001,
+    "threshold_recall_target": 0.85,
+    "amp": true,
+    "no_amp": false
+  },
+  "feature_meta": {
+    "feature_mode": "raw_geom",
+    "raw_dim": 1434,
+    "output_dim": 2061,
+    "geom": {
+      "preset": "compact",
+      "selected_landmarks": [
+        1,
+        4,
+        10,
+        13,
+        14,
+        17,
+        33,
+        61,
+        70,
+        78,
+        82,
+        87,
+        95,
+        105,
+        133,
+        145,
+        152,
+        159,
+        172,
+        181,
+        234,
+        263,
+        291,
+        300,
+        308,
+        312,
+        317,
+        324,
+        334,
+        362,
+        374,
+        386,
+        397,
+        405,
+        454
+      ],
+      "pairwise_count": 595,
+      "stats_dim": 19,
+      "ratio_dim": 7,
+      "symmetry_dim": 6,
+      "geom_dim": 627
+    }
+  },
+  "standardize": true,
+  "split_sizes": {
+    "binary_train": 29080,
+    "binary_val": 4910,
+    "binary_test": 6009,
+    "pretrain7_train": 101508,
+    "pretrain7_val": 17314
+  },
+  "results": {
+    "direct_binary": {
+      "checkpoint": "C:\\Users\\ldy34\\Desktop\\Face\\ML\\experiments_feature_ensemble\\raw_geom_compact_seed123\\direct_binary_best.pth",
+      "val_thresholds": {
+        "default_0p5": {
+          "threshold": 0.5,
+          "accuracy": 0.8183299389002037,
+          "balanced_accuracy": 0.8176574782734947,
+          "macro_f1": 0.8168726743851547,
+          "neutral_recall": 0.9002020202020202,
+          "anxious_recall": 0.7351129363449692,
+          "anxious_precision": 0.8787432498772705,
+          "confusion_matrix": [
+            [
+              2228,
+              247
+            ],
+            [
+              645,
+              1790
+            ]
+          ]
+        },
+        "best_macro_f1": {
+          "threshold": 0.44460245966911316,
+          "accuracy": 0.8197556008146639,
+          "balanced_accuracy": 0.8192143197892685,
+          "macro_f1": 0.818786842056866,
+          "neutral_recall": 0.8856565656565657,
+          "anxious_recall": 0.7527720739219712,
+          "anxious_precision": 0.8662570888468809,
+          "confusion_matrix": [
+            [
+              2192,
+              283
+            ],
+            [
+              602,
+              1833
+            ]
+          ]
+        },
+        "best_balanced_accuracy": {
+          "threshold": 0.44460245966911316,
+          "accuracy": 0.8197556008146639,
+          "balanced_accuracy": 0.8192143197892685,
+          "macro_f1": 0.818786842056866,
+          "neutral_recall": 0.8856565656565657,
+          "anxious_recall": 0.7527720739219712,
+          "anxious_precision": 0.8662570888468809,
+          "confusion_matrix": [
+            [
+              2192,
+              283
+            ],
+            [
+              602,
+              1833
+            ]
+          ]
+        },
+        "best_macro_with_anxious_recall_ge_0.85": {
+          "threshold": 0.125600665807724,
+          "accuracy": 0.7859470468431772,
+          "balanced_accuracy": 0.7864654761164002,
+          "macro_f1": 0.7852436577107486,
+          "neutral_recall": 0.7228282828282828,
+          "anxious_recall": 0.8501026694045175,
+          "anxious_precision": 0.7510885341074021,
+          "confusion_matrix": [
+            [
+              1789,
+              686
+            ],
+            [
+              365,
+              2070
+            ]
+          ]
+        }
+      },
+      "test_by_val_threshold": {
+        "default_0p5": {
+          "threshold": 0.5,
+          "accuracy": 0.8467299051422865,
+          "balanced_accuracy": 0.8472185447044964,
+          "macro_f1": 0.8463770172477068,
+          "neutral_recall": 0.9026192075218268,
+          "anxious_recall": 0.791817881887166,
+          "anxious_precision": 0.8921933085501859,
+          "confusion_matrix": [
+            [
+              2688,
+              290
+            ],
+            [
+              631,
+              2400
+            ]
+          ]
+        },
+        "best_macro_f1": {
+          "threshold": 0.44460245966911316,
+          "accuracy": 0.8487269096355466,
+          "balanced_accuracy": 0.849095334332338,
+          "macro_f1": 0.8485489168431619,
+          "neutral_recall": 0.8908663532572196,
+          "anxious_recall": 0.8073243154074563,
+          "anxious_precision": 0.8827561327561327,
+          "confusion_matrix": [
+            [
+              2653,
+              325
+            ],
+            [
+              584,
+              2447
+            ]
+          ]
+        },
+        "best_balanced_accuracy": {
+          "threshold": 0.44460245966911316,
+          "accuracy": 0.8487269096355466,
+          "balanced_accuracy": 0.849095334332338,
+          "macro_f1": 0.8485489168431619,
+          "neutral_recall": 0.8908663532572196,
+          "anxious_recall": 0.8073243154074563,
+          "anxious_precision": 0.8827561327561327,
+          "confusion_matrix": [
+            [
+              2653,
+              325
+            ],
+            [
+              584,
+              2447
+            ]
+          ]
+        },
+        "best_macro_with_anxious_recall_ge_0.85": {
+          "threshold": 0.125600665807724,
+          "accuracy": 0.8225994341820603,
+          "balanced_accuracy": 0.821936807455709,
+          "macro_f1": 0.8213873909685778,
+          "neutral_recall": 0.7468099395567495,
+          "anxious_recall": 0.8970636753546685,
+          "anxious_precision": 0.7828966311546214,
+          "confusion_matrix": [
+            [
+              2224,
+              754
+            ],
+            [
+              312,
+              2719
+            ]
+          ]
+        }
+      },
+      "classification_report_default_0p5": "              precision    recall  f1-score   support\n\n     Neutral     0.8099    0.9026    0.8537      2978\n     Anxious     0.8922    0.7918    0.8390      3031\n\n    accuracy                         0.8467      6009\n   macro avg     0.8510    0.8472    0.8464      6009\nweighted avg     0.8514    0.8467    0.8463      6009\n"
+    }
+  },
+  "artifacts": {
+    "direct_ckpt": "C:\\Users\\ldy34\\Desktop\\Face\\ML\\experiments_feature_ensemble\\raw_geom_compact_seed123\\direct_binary_best.pth",
+    "direct_bundle": "C:\\Users\\ldy34\\Desktop\\Face\\ML\\experiments_feature_ensemble\\raw_geom_compact_seed123\\direct_binary_bundle.pth",
+    "pretrain7_ckpt": null,
+    "finetune_ckpt": null,
+    "finetune_bundle": null
+  }
+}

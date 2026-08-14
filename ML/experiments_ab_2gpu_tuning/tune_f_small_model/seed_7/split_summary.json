@@ -1,0 +1,9 @@
+{
+  "binary_train": 28471,
+  "binary_val": 5223,
+  "binary_test": 6305,
+  "pretrain7_train": 100143,
+  "pretrain7_val": 17611,
+  "binary_test_groups": 151,
+  "input_dim": 1434
+}
